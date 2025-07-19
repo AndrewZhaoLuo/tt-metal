@@ -1,0 +1,1 @@
+HF_MODEL=meta-llama/Llama-3.1-8B MAX_PREFILL_CHUNK_SIZE=128 PAD_MLP_CORES=16 WH_ARCH_YAML=wormhole_b0_80_arch_eth_dispatch.yaml pytest models/tt_transformers/demo/simple_text_demo.py -k "performance and batch-32"
