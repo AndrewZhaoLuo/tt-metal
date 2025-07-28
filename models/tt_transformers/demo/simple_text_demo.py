@@ -25,14 +25,25 @@ from models.tt_transformers.tt.common import (
 from models.tt_transformers.tt.generator import Generator, SamplingParams, create_submeshes
 from models.tt_transformers.tt.model_config import DecodersPrecision, determine_device_name, parse_decoder_json
 
+REFERENCE_OUTPUT_FOLDER = "models/tt_transformers/tests/reference_outputs/"
+
 
 class TokenAccuracy:
     def __init__(self, model_name):
         self.gt_pos = -1
         self.store_predicted_tokens = []
-        file_list = [str(path) for path in Path("models/tt_transformers/tests/reference_outputs/").glob("*.refpt")]
-        reference_data_file = [f for f in file_list if model_name in f][0]
+        file_list = [str(path) for path in Path(REFERENCE_OUTPUT_FOLDER).glob("*.refpt")]
+        expected_file = f"{model_name}.refpt"
+
+        reference_data_file = [f for f in file_list if f.endswith(expected_file)]
+        if len(reference_data_file) != 1:
+            breakpoint()
+            raise ValueError(
+                f"Expect exactly one reference file {expected_file} in {REFERENCE_OUTPUT_FOLDER} but found {len(reference_data_file)} files!"
+            )
+        reference_data_file = reference_data_file[0]
         assert os.path.exists(reference_data_file)
+
         logger.info(f"Loading reference data from {reference_data_file}")
         reference_data = torch.load(reference_data_file)
         self.reference_tokens = reference_data["reference_tokens"]
