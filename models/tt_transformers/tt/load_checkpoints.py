@@ -233,7 +233,12 @@ def split_hf_keys(loaded_weights):
             q_key = key.replace("self_attn.qkv_proj", "self_attn.q_proj")
             k_key = key.replace("self_attn.qkv_proj", "self_attn.k_proj")
             v_key = key.replace("self_attn.qkv_proj", "self_attn.v_proj")
-            q_tensor, k_tensor, v_tensor = torch.split(tensor, tensor.shape[0] // 3, dim=0)
+
+            # TODO: Fix This in a better way!
+            try:
+                q_tensor, k_tensor, v_tensor = torch.split(tensor, [40 * 128, 10 * 128, 10 * 128], dim=0)
+            except:
+                breakpoint()
             converted_weights[q_key] = q_tensor
             converted_weights[k_key] = k_tensor
             converted_weights[v_key] = v_tensor
