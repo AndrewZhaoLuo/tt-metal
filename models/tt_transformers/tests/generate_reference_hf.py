@@ -24,7 +24,7 @@ def generate_reference_outputs(total_length, output_file, model_name):
         config.rope_scaling = {"factor": 4.0, "original_max_position_embeddings": 32768, "type": "yarn"}
 
     tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(model_name, config=config, device_map="auto")
+    model = AutoModelForCausalLM.from_pretrained(model_name, config=config, device_map="auto", torch_dtype="auto")
     model.eval()
 
     # Load the book text
