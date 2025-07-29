@@ -105,6 +105,11 @@ def generate_reference_outputs(total_length, output_file, hf_model_name=None):
             # Trim input chunk if needed
             chunk_tokens = chunk_tokens[:, :actual_chunk_size]
 
+            # TODO: this is wrong, we want logits on the out and index ids on the in.
+            #
+            # Here we assume if we are given the HF model name we do some weird stuff vs the hf way
+            #
+            # it probably should be delineated on whether it is a meta format instead...
             # Process chunk based on model type
             chunk_tokens = chunk_tokens.to(device)
             if hf_model_name:
