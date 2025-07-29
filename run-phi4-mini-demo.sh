@@ -1,0 +1,1 @@
+HF_MODEL=microsoft/Phi-4-mini-instruct MAX_PREFILL_CHUNK_SIZE=128 PAD_MLP_CORES=16 WH_ARCH_YAML=wormhole_b0_80_arch_eth_dispatch.yaml pytest models/tt_transformers/demo/simple_text_demo.py -k "performance and batch-1"
