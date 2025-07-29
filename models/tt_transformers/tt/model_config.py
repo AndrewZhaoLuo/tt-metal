@@ -7,7 +7,7 @@ import math
 import os
 from enum import Enum, auto
 from pathlib import Path
-from typing import Tuple
+from typing import Optional, Tuple
 
 import torch
 from loguru import logger
@@ -420,6 +420,8 @@ class ModelArgs:
         max_seq_len=1024 * 128,
         optimizations=None,
         cache_hf=False,  # Set to False to reduce memory usage by not caching HF model
+        hf_model_name: Optional[str] = None,  # If not provided, use env variable
+        llama_dir: Optional[str] = None,  # If not provided, use env variable
     ):
         self.num_devices = mesh_device.get_num_devices() if mesh_device else 0
         self.mesh_device = mesh_device
@@ -450,8 +452,8 @@ class ModelArgs:
         ), "FAKE_DEVICE has been renamed to MESH_DEVICE for consistency with vLLM, please update your environment variables and run again."
 
         # Remove trailing slashes so basename gets the right model name
-        LLAMA_DIR = os.getenv("LLAMA_DIR")
-        HF_MODEL = os.getenv("HF_MODEL")
+        LLAMA_DIR = llama_dir or os.getenv("LLAMA_DIR")
+        HF_MODEL = hf_model_name or os.getenv("HF_MODEL")
         self.CACHE_PATH = os.getenv("TT_CACHE_PATH")
         assert not (LLAMA_DIR and HF_MODEL), "Only one of LLAMA_DIR or HF_MODEL should be set"
         if LLAMA_DIR:
